@@ -1,0 +1,48 @@
+---
+title: "Burst Analysis Trial by Trial"
+author: "Charlie Wilson"
+date: "2025-03-09"
+output: pdf_document
+---
+
+This is a new script for Feb 2025 that starts out with trial by trial analysis for the PLoS Biology revisionss. 
+
+
+```{r echo = FALSE, results = 'hide', warning = FALSE, message = FALSE}
+
+#Setup and packages
+
+#Additional packages:
+library(ggplot2) 
+library(ggpubr)
+library(tidyr) 
+#library(plyr) 
+library(dplyr) 
+library(lubridate) 
+library(svDialogs)
+library(RcppRoll)
+
+```
+
+
+
+
+```{r echo = FALSE, eval = FALSE, results = 'hide'}
+
+
+event.raw <- read.csv(file="ecog.csv",sep= ",", dec =",",  header = TRUE, fill=TRUE, colClasses=c("burst_type"="character")); #Load data from .txt file using space as separator
+
+Sess.data <- event.raw %>%
+        group_by(burst_type) %>%   #Apply this session by session   #was group_by(session, monkey)
+        filter(event==153) %>%   #Noisy bad answer
+        count(position)  #Count the instances
+
+
+ggplot(Sess.data, aes(x=position, y=n)) + #What data to plot
+    geom_point(aes(color = burst_type))  + #Add a specific plot and colour it
+    facet_grid(burst_type)
+```
+
+
+
+
